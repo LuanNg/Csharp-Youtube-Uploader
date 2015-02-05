@@ -18,6 +18,9 @@ using Google.Apis.Books.v1.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 
+using System.Threading;
+using Google.Apis.YouTube.v3;
+
 namespace Csharp_Youtube_Uploader
 {
 	/// <summary>
@@ -25,23 +28,12 @@ namespace Csharp_Youtube_Uploader
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public static UserCredential userID;
-		public static bool isVerified = false;
 		public MainWindow()
 		{
 			InitializeComponent();
-			UserCredential user;
-			Google_auth.Check += onKeyReceived;
+		}
 
-			
-		}
 		
-		private void onKeyReceived()
-		{
-			userID = Google_auth.returnUserCredential();
-			isVerified = true;
-			MessageBox.Show(userID.UderId);
-		}
 
 	}
 }
