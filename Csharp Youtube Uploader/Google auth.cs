@@ -14,11 +14,8 @@ namespace Csharp_Youtube_Uploader
 {
 	class Google_auth
 	{
-		/// <summary>
-		/// Gets a User credential :)
-		/// </summary>
-		/// <returns>UserCredential</returns>
-		static async Task<UserCredential> getUserCredential()
+		static UserCredential userCred;
+		private static async Task<UserCredential> requestUserCredential()
 		{
 			
 				return  await GoogleWebAuthorizationBroker.AuthorizeAsync(
@@ -36,5 +33,27 @@ namespace Csharp_Youtube_Uploader
 				
 			
 		}
+		
+		public delegate void OnReceivedUserCredential();
+		/// <summary>
+		/// Gets fired when the usercred is received
+		/// </summary>
+		public static event OnReceivedUserCredential Check;
+		private static void eventEnabler()
+		{
+			if (Check != null)
+			{
+				Check();
+			}
+		}
+		private static async void getUserCred()
+		{
+			userCred = await requestUserCredential();
+			eventEnabler();
+		}
+		public static returnUserCredential(){
+			return userCred;
+		}
+
 	}
 }
