@@ -28,9 +28,9 @@
 			</tb:TaskbarIcon.TrayToolTip>
 		</tb:TaskbarIcon>
 		<!-- End Tray-->
-		<TabControl TabStripPlacement="Left" Margin="0, 0, 0, 10">
-
-			<TabItem Name="account" Header="Account" Width="100">
+		
+		<TabControl TabStripPlacement="Left" BorderBrush="#FF9E9E9E" BorderThickness="1,0,0,0">
+			<TabItem Name="account" Header="Account">
 				<TabItem.Content>
 					<TextBlock TextWrapping="WrapWithOverflow">
 						#WIP it hard
@@ -39,7 +39,7 @@
 			</TabItem>
 			
 			<!--Spacer-->
-			<TabItem Name="spacer" IsEnabled="False">
+			<TabItem Name="spacer" Header ="" IsEnabled="False">
 			</TabItem>
 
 			<TabItem Name="presets" Header="Upload Presets">
