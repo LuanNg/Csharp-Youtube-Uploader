@@ -12,6 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Books.v1;
+using Google.Apis.Books.v1.Data;
+using Google.Apis.Services;
+using Google.Apis.Util.Store;
 
 namespace Csharp_Youtube_Uploader
 {
@@ -20,9 +25,23 @@ namespace Csharp_Youtube_Uploader
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		public static UserCredential userID;
+		public static bool isVerified = false;
 		public MainWindow()
 		{
 			InitializeComponent();
+			UserCredential user;
+			Google_auth.Check += onKeyReceived;
+
+			
 		}
+		
+		private void onKeyReceived()
+		{
+			userID = Google_auth.returnUserCredential();
+			isVerified = true;
+			MessageBox.Show(userID.UderId);
+		}
+
 	}
 }

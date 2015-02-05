@@ -51,7 +51,7 @@ namespace Csharp_Youtube_Uploader
 			userCred = await requestUserCredential();
 			eventEnabler();
 		}
-		public static returnUserCredential(){
+		public static UserCredential returnUserCredential(){
 			return userCred;
 		}
 
