@@ -6,7 +6,24 @@
 
 	<Grid>
 		<tb:TaskbarIcon
-		IconSource="/Tray.Ico"
-		ToolTipText="hello world" />
+		IconSource="/Tray.Ico">
+			<tb:TaskbarIcon.TrayToolTip>
+				<Border
+					Background="Black"
+					BorderBrush="Orange"
+					BorderThickness="2"
+					CornerRadius="6"
+					Opacity="0.9"
+					Width="250"
+					Height="100">
+					<TextBlock
+						Text="test"
+						HorizontalAlignment="Center"
+						VerticalAlignment="Center"
+						Foreground="White"
+						/>
+				</Border>
+			</tb:TaskbarIcon.TrayToolTip>
+		</tb:TaskbarIcon>
 	</Grid>
 </Window>
