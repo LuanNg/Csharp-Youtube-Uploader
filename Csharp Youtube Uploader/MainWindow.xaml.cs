@@ -17,7 +17,7 @@ using Google.Apis.Books.v1;
 using Google.Apis.Books.v1.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
-
+using MahApps.Metro.Controls;
 using System.Threading;
 using Google.Apis.YouTube.v3;
 
@@ -26,7 +26,7 @@ namespace Csharp_Youtube_Uploader
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow : MetroWindow
 	{
 		public MainWindow()
 		{
