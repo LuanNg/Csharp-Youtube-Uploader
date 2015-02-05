@@ -2,10 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:tb="http://www.hardcodet.net/taskbar" 
-        Title="MainWindow" Height="350" Width="525">
+        Title="C# Youtube Uploader" Height="1075" Width="1920" WindowStartupLocation="CenterScreen" WindowState="Maximized" Icon="Tray.ico" MinWidth="853" MinHeight="480">
 
 	<Grid>
-		<tb:TaskbarIcon
+	<!-- Start Tray-->
+	<tb:TaskbarIcon
 		IconSource="/Tray.Ico">
 			<tb:TaskbarIcon.TrayToolTip>
 				<Border
@@ -25,5 +26,37 @@
 				</Border>
 			</tb:TaskbarIcon.TrayToolTip>
 		</tb:TaskbarIcon>
+		<!-- End Tray-->
+		<TabControl TabStripPlacement="Left" Margin="0, 0, 0, 10">
+
+			<TabItem Name="account" Header="Account" Width="100">
+				<TabItem.Content>
+					<TextBlock TextWrapping="WrapWithOverflow">
+						#WIP it hard
+					</TextBlock>
+				</TabItem.Content>
+			</TabItem>
+			
+			<!--Spacer-->
+			<TabItem Name="spacer" IsEnabled="False">
+			</TabItem>
+
+			<TabItem Name="presets" Header="Upload Presets">
+				<TabItem.Content>
+					<TextBlock TextWrapping="WrapWithOverflow">
+						#WIP it hard
+					</TextBlock>
+				</TabItem.Content>
+			</TabItem>
+
+			<TabItem Name="queue" Header="Upload Queue">
+				<TabItem.Content>
+					<TextBlock TextWrapping="WrapWithOverflow">
+						#WIP it hard
+					</TextBlock>
+				</TabItem.Content>
+			</TabItem>
+
+		</TabControl>
 	</Grid>
 </Window>
