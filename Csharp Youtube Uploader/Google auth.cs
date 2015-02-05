@@ -20,7 +20,6 @@ namespace Csharp_Youtube_Uploader
 		static UserCredential userCred;
 		public static async Task<UserCredential> requestUserCredentialUpload()
 		{
-				MessageBox.Show("Task will be returned");
 				return await GoogleWebAuthorizationBroker.AuthorizeAsync(
 					new ClientSecrets
 					{
