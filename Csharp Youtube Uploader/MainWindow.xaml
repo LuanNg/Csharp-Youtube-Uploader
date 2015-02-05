@@ -6,7 +6,7 @@
 
 	<Grid>
 		<tb:TaskbarIcon
-		IconSource="/Error.ico"
+		IconSource="/Tray.Ico"
 		ToolTipText="hello world" />
 	</Grid>
 </Window>
