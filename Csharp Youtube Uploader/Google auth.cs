@@ -27,9 +27,10 @@ namespace Csharp_Youtube_Uploader
 						ClientId = "931649744860-vbhhdcqmahkkltvj84otg8t8a2iffqlq.apps.googleusercontent.com",
 						ClientSecret = "Aj1OCCqh8Qgp2sVYZAQwZKm9"
 					}, 
-					new[] { YouTubeService.Scope.YoutubeUpload },
+					new[] { YouTubeService.Scope.YoutubeUpload, YouTubeService.Scope.Youtube, YouTubeService.Scope.Youtubepartner },
 					"user",
-					CancellationToken.None
+					CancellationToken.None,
+					new FileDataStore("C#YTUploader/Youtube.Auth.Store")
 					);
 				
 
