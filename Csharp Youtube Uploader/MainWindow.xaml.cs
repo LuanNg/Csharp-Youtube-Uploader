@@ -31,6 +31,13 @@ namespace Csharp_Youtube_Uploader
 		public MainWindow()
 		{
 			InitializeComponent();
+			Run().Wait();
+
+		}
+		private async Task Run()
+		{
+			var credential = await Google_auth.requestUserCredentialUpload();
+			MessageBox.Show(credential.UderId);
 		}
 
 		
