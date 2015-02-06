@@ -51,7 +51,7 @@ namespace Csharp_Youtube_Uploader
 				MessageBox.Show(uploadRequest.Body.ToString());
 				uploadRequest.ProgressChanged += videosInsertRequest_ProgressChanged;
 				uploadRequest.ResponseReceived += videosInsertRequest_ResponseReceived;
-				uploadRequest.Upload();
+				await uploadRequest.UploadAsync();
 			}
 
 		}
@@ -77,10 +77,15 @@ namespace Csharp_Youtube_Uploader
 						MessageBox.Show(help.ToString());
 					}
 				}
-				System.Windows.Controls.Border test = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
-				test.FindChild<ProgressBar>("Progress").Value = obj.BytesSent / filesize;
-				test.FindChild<TextBlock>("Stats").Text = (obj.BytesSent / filesize).ToString() + " | " + obj.BytesSent + " | " + filesize;
-			}
+				Dispatcher.BeginInvoke(
+				new Action(() => {
+					System.Windows.Controls.Border test = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
+					test.FindChild<ProgressBar>("Progress").Value = obj.BytesSent / filesize;
+					test.FindChild<TextBlock>("Stats").Text = (obj.BytesSent / filesize).ToString() + " | " + obj.BytesSent + " | " + filesize;
+			
+					})
+				);
+				}
 		}
 
 		private void LanguageButton_Click(object sender, RoutedEventArgs e)
@@ -98,7 +103,7 @@ namespace Csharp_Youtube_Uploader
 		}
 		private void Upload(object sender, RoutedEventArgs e)
 		{
-			Upload("Test Video", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"E:\Hochgeladen\From Dust\From Dust #11  So und jetzt.mkv");
+			Upload("Test Video23", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"C:\Users\Fabian\Videos\2015-02-03-2024-20.flv");
 		}
 		
 	}
