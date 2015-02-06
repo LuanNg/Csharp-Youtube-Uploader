@@ -31,11 +31,13 @@ namespace Csharp_Youtube_Uploader
 	/// </summary>
 	public partial class MainWindow : MetroWindow
 	{
+		double filesize;
+		
 		public MainWindow()
 		{
 			InitializeComponent();
 			MessageBox.Show("Hue?");
-			Upload("Test Video", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"C:\\Users\\Fabian\\AppData\\Roaming\\Skype\\My Skype Received Files\\Updatevideo 31.1.15.mkv").Wait();
+			//Upload("Test Video", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"C:\\Users\\Fabian\\AppData\\Roaming\\Skype\\My Skype Received Files\\Updatevideo 31.1.15.mkv").Wait();
 			MessageBox.Show("Hue");
 
 		}
@@ -48,6 +50,7 @@ namespace Csharp_Youtube_Uploader
 			MessageBox.Show("Opening file...");
 			using (var file = new FileStream(filePath, FileMode.Open))
 			{
+				filesize = file.Length;
 				var uploadRequest = youtuberequest.Videos.Insert(video, "snippet,status", file, "video/*");
 				MessageBox.Show(uploadRequest.Body.ToString());
 				uploadRequest.ProgressChanged += videosInsertRequest_ProgressChanged;
@@ -80,6 +83,9 @@ namespace Csharp_Youtube_Uploader
 					}
 				}
 				MessageBox.Show(obj.BytesSent.ToString());
+
+				System.Windows.Controls.Border test = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
+				test.FindChild<ProgressBar>("Progress").Value = obj.BytesSent / filesize;
 			}
 		}
 
@@ -97,8 +103,7 @@ namespace Csharp_Youtube_Uploader
 			
 		}
 		/*
-		System.Windows.Controls.Border test = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
-		test.FindChild<ProgressBar>("Progress").Value = 50;
+		
 		 **/
 	}
 }
