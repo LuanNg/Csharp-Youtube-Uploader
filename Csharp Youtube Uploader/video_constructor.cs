@@ -9,6 +9,7 @@ using Google.Apis.Upload;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
+using System.Windows;
 namespace Csharp_Youtube_Uploader
 {
 	class video_constructor
@@ -44,7 +45,7 @@ namespace Csharp_Youtube_Uploader
 			video.Snippet.Title = Title;
 			video.Snippet.Description = Description;
 			video.Snippet.Tags = tags;
-			video.Snippet.CategoryId = category.ToString(); // See https://developers.google.com/youtube/v3/docs/videoCategories/list ---> Find ich nicht
+			video.Snippet.CategoryId = ((int)category).ToString(); // See https://developers.google.com/youtube/v3/docs/videoCategories/list ---> Find ich nicht
 			video.Status = new VideoStatus();
 			video.Status.PrivacyStatus = PrivacyStatus; // or "private" or "public"
 			return video;
