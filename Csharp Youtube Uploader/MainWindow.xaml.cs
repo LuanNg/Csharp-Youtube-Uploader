@@ -34,7 +34,9 @@ namespace Csharp_Youtube_Uploader
 		public MainWindow()
 		{
 			InitializeComponent();
-			
+			MessageBox.Show("Hue?");
+			Upload("Test Video", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", "C:\\Users\\Fabian\\AppData\\Roaming\\Skype\\My Skype Received Files\\Updatevideo 31.1.15.mkv").Wait();
+			MessageBox.Show("Hue");
 
 		}
 		private async Task Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path)
@@ -43,12 +45,13 @@ namespace Csharp_Youtube_Uploader
 			var youtuberequest = Youtube_request.getYoutubeService(credential);
 			var video = video_constructor.constructVideo(Title,Description,tags,category,PrivacyStatus);
 			var filePath = path;
+			MessageBox.Show("Opening file...");
 			using (var file = new FileStream(filePath, FileMode.Open))
 			{
 			var uploadRequest = youtuberequest.Videos.Insert(video, "snippet,status", file, "video/*");
 			uploadRequest.ProgressChanged += videosInsertRequest_ProgressChanged;
 			uploadRequest.ResponseReceived += videosInsertRequest_ResponseReceived;
-
+			MessageBox.Show("Uploading...");
 			await uploadRequest.UploadAsync();
 		}
 
@@ -56,12 +59,19 @@ namespace Csharp_Youtube_Uploader
 
 		private void videosInsertRequest_ResponseReceived(Video obj)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		private void videosInsertRequest_ProgressChanged(IUploadProgress obj)
 		{
-			throw new NotImplementedException();
+			if (obj.Status == UploadStatus.Completed)
+			{
+				MessageBox.Show("Upload completed");
+			}
+			else
+			{
+				this.Title = obj.BytesSent.ToString();
+			}
 		}
 
 		private void LanguageButton_Click(object sender, RoutedEventArgs e)
