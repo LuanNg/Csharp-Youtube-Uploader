@@ -37,7 +37,7 @@ namespace Csharp_Youtube_Uploader
 		{
 			InitializeComponent();
 			MessageBox.Show("Hue?");
-			Upload("Test Video2", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"C:\\Users\\Fabian\\AppData\\Roaming\\Skype\\My Skype Received Files\\Updatevideo 31.1.15.mkv").Wait();
+			//Upload("Test Video", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"C:\\Users\\Fabian\\AppData\\Roaming\\Skype\\My Skype Received Files\\Updatevideo 31.1.15.mkv").Wait();
 			MessageBox.Show("Hue");
 
 		}
