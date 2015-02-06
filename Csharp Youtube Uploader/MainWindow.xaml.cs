@@ -38,7 +38,7 @@ namespace Csharp_Youtube_Uploader
 		{
 			var credential = await Google_auth.requestUserCredentialUpload();
 			var youtubrequest = Youtube_request.getYoutubeService(credential);
-			var video = video_constructor.constructVideo("Title","Description",new string[]{"tags"},"public");
+			var video = video_constructor.constructVideo("Title","Description",new string[]{"tags"},video_constructor.Categories.Action,"public");
 
 		}
 
