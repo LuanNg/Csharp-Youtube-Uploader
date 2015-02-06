@@ -31,14 +31,14 @@ namespace Csharp_Youtube_Uploader
 		public MainWindow()
 		{
 			InitializeComponent();
-			Run().Wait();
+			
 
 		}
-		private async Task Run()
+		private async Task Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus)
 		{
 			var credential = await Google_auth.requestUserCredentialUpload();
 			var youtubrequest = Youtube_request.getYoutubeService(credential);
-			var video = video_constructor.constructVideo("Title","Description",new string[]{"tags"},video_constructor.Categories.Action,"public");
+			var video = video_constructor.constructVideo(Title,Description,tags,category,PrivacyStatus);
 
 		}
 
