@@ -22,7 +22,7 @@ namespace Csharp_Youtube_Uploader
 		{
 			Grid UploadEntry = new Grid()
 			{
-				Height = 48,
+				Height = 65,
 				HorizontalAlignment = HorizontalAlignment.Stretch,
 				VerticalAlignment = VerticalAlignment.Top,
 			};
@@ -51,7 +51,7 @@ namespace Csharp_Youtube_Uploader
 				Name = "Progress",
 			};
 			Thickness ProgressMargin = new Thickness();
-			ProgressMargin.Left = 90;
+			ProgressMargin.Left = 120;
 			ProgressMargin.Top = 19;
 			ProgressMargin.Right = 180;
 			ProgressMargin.Bottom = 19;
@@ -62,7 +62,7 @@ namespace Csharp_Youtube_Uploader
 			TextBlock Stats = new TextBlock()
 			{
 				Name = "Stats",
-				Text = "test",
+				Text = "test\n0% \nStart Time: " + DateTime.Now + "\nFinished in: ",
 			};
 			Thickness StatsMargin = new Thickness();
 			StatsMargin.Left = 660;

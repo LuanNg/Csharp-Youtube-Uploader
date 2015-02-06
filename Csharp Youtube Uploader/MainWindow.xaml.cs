@@ -39,6 +39,9 @@ namespace Csharp_Youtube_Uploader
 		}
 		private async void Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path)
 		{
+			UploadQueue.Items.Add(UploadEntry.newUploadEntry());	//Upload Queue Entry
+			TabControl.SelectedIndex = 3;							//Switches Tab to Upload Queue
+
 			var credential = await Google_auth.requestUserCredentialUpload();
 			var youtuberequest = Youtube_request.getYoutubeService(credential);
 			var video = video_constructor.constructVideo(Title,Description,tags,category,PrivacyStatus);
@@ -46,19 +49,11 @@ namespace Csharp_Youtube_Uploader
 			using (var file = new FileStream(filePath, FileMode.Open))
 			{
 				filesize = file.Length;
-				MessageBox.Show("" + filesize);
 				var uploadRequest = youtuberequest.Videos.Insert(video, "snippet,status", file, "video/*");
-				MessageBox.Show(uploadRequest.Body.ToString());
 				uploadRequest.ProgressChanged += videosInsertRequest_ProgressChanged;
-				uploadRequest.ResponseReceived += videosInsertRequest_ResponseReceived;
 				await uploadRequest.UploadAsync();
 			}
 
-		}
-
-		private void videosInsertRequest_ResponseReceived(Video obj)
-		{
-			
 		}
 
 		private void videosInsertRequest_ProgressChanged(IUploadProgress obj)
@@ -81,8 +76,11 @@ namespace Csharp_Youtube_Uploader
 				new Action(() => {
 					System.Windows.Controls.Border test = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
 					test.FindChild<ProgressBar>("Progress").Value = obj.BytesSent / filesize;
-					test.FindChild<TextBlock>("Stats").Text = (obj.BytesSent / filesize).ToString() + " | " + obj.BytesSent + " | " + filesize;
-			
+					string[] Stats = test.FindChild<TextBlock>("Stats").Text.Split('\n');
+					DateTime StartTime = DateTime.Parse(Stats[2].Substring(13));
+					TimeSpan ElapsedTime = DateTime.Now - StartTime;
+					TimeSpan RemainingTime = TimeSpan.FromTicks((long)(ElapsedTime.Ticks * (100 - (obj.BytesSent / filesize))));
+					test.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n" + Math.Round(obj.BytesSent / filesize, 3) + "% \n" + Stats[2] + "\nFinished in: " + RemainingTime.ToString(@"dd\.hh\:mm\:ss");
 					})
 				);
 				}
@@ -96,14 +94,9 @@ namespace Csharp_Youtube_Uploader
 			(sender as Button).ContextMenu.IsOpen = true;
 		}
 
-		private void Button_Click(object sender, RoutedEventArgs e)
-		{
-			UploadQueue.Items.Add(UploadEntry.newUploadEntry());
-			
-		}
 		private void Upload(object sender, RoutedEventArgs e)
 		{
-			Upload("Test Video23", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"C:\Users\Fabian\Videos\2015-02-03-2024-20.flv");
+			Upload("Test Video23", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"E:\Hochgeladen\From Dust\From Dust #11  So und jetzt.mkv");
 		}
 		
 	}

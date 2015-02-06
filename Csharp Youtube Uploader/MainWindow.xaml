@@ -30,7 +30,7 @@
 		</tb:TaskbarIcon>
 		<!-- End Tray-->
 
-		<TabControl>
+		<TabControl Name="TabControl">
 			<TabItem Header="Account">
 				<Grid>
 					<TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Account Name:" VerticalAlignment="Top" FontSize="24" Foreground="#FF444444"/>
@@ -59,7 +59,6 @@
 					<ListBox Name="UploadQueue" Margin="0,0,0,38" ScrollViewer.HorizontalScrollBarVisibility="Hidden"/>
 					<Button Content="Start" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Bottom" Width="100" Height="33"/>
 					<Button Content="Stop" HorizontalAlignment="Left" Margin="115,0,0,0" VerticalAlignment="Bottom" Width="100" Height="33"/>
-					<Button Content="Button" HorizontalAlignment="Left" Margin="255,372,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
 				</Grid>
 			</TabItem>
 
