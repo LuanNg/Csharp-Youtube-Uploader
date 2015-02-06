@@ -13,7 +13,7 @@ namespace Csharp_Youtube_Uploader
 {
 	class video_constructor
 	{
-		public static video_constructor constructVideo(string Title, string Description, string[] tags,string PrivacyStatus)
+		public static Video constructVideo(string Title, string Description, string[] tags,string PrivacyStatus)
 		{
 			var video = new Video();
 			video.Snippet = new VideoSnippet();
