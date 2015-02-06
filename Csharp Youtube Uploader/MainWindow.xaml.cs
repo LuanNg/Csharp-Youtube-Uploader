@@ -1,11 +1,20 @@
-﻿using System;
+﻿using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using Google.Apis.Upload;
+using Google.Apis.Util.Store;
+using Google.Apis.YouTube.v3;
+using Google.Apis.YouTube.v3.Data;
+using MahApps.Metro;
+using MahApps.Metro.Controls;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Reflection;
-using MahApps.Metro;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -14,15 +23,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
-using Google.Apis.Upload;
-using Google.Apis.Util.Store;
-using Google.Apis.YouTube.v3;
-using Google.Apis.YouTube.v3.Data;
-using System.Threading;
-using System.IO;
-using MahApps.Metro.Controls;
 
 namespace Csharp_Youtube_Uploader
 {
@@ -94,6 +94,11 @@ namespace Csharp_Youtube_Uploader
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 			UploadQueue.Items.Add(UploadEntry.newUploadEntry());
+			
 		}
+		/*
+		System.Windows.Controls.Border test = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
+		test.FindChild<ProgressBar>("Progress").Value = 50;
+		 **/
 	}
 }

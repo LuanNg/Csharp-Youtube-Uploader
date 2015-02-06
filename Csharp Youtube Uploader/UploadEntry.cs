@@ -46,7 +46,10 @@ namespace Csharp_Youtube_Uploader
 			Thumbnail.Source = logo;
 			UploadEntry.Children.Add(Thumbnail);
 
-			ProgressBar Progress = new ProgressBar();
+			ProgressBar Progress = new ProgressBar()
+			{
+				Name = "Progress",
+			};
 			Thickness ProgressMargin = new Thickness();
 			ProgressMargin.Left = 90;
 			ProgressMargin.Top = 19;
@@ -58,6 +61,7 @@ namespace Csharp_Youtube_Uploader
 
 			TextBlock Stats = new TextBlock()
 			{
+				Name = "Stats",
 				Text = "test",
 			};
 			Thickness StatsMargin = new Thickness();
