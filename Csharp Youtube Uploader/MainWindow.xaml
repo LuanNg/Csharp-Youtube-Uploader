@@ -38,22 +38,10 @@
 					<TextBlock Margin="10,47,0,0" TextWrapping="Wrap" FontStyle="Italic" Foreground="Red" HorizontalAlignment="Left" VerticalAlignment="Top"><Run Text="no e-mail adress is required, this app is "/><Run Text="u"/><Run Text="sing Google's OAuth2"/></TextBlock>
 					<ListBox Height="244" Margin="10,152,755,0" BorderThickness="0" VerticalAlignment="Top"/>
 					<TextBlock HorizontalAlignment="Left" Margin="10,120,0,0" TextWrapping="Wrap" Text="Account List:" VerticalAlignment="Top" FontSize="20" Foreground="#FF444444"/>
-					<Button Margin="725,11,10,359"
-							Click="LanguageButton_Click"
-							ContextMenuService.IsEnabled="False" Height="31" Width="100" HorizontalAlignment="Right" VerticalAlignment="Top">
-						<Button.Content>
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Text="Language"/>
-								<Path x:Name="BtnArrow" Margin="4" VerticalAlignment="Center" Width="6" Fill="#FF527DB5" Stretch="Uniform" HorizontalAlignment="Right" Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z "/>
-							</StackPanel>
-							</Button.Content>
-						<Button.ContextMenu>
-							<ContextMenu >
-								<MenuItem Header="English"/>
-								<MenuItem Header="German"/>
-							</ContextMenu>
-						</Button.ContextMenu>
-					</Button>
+					<ComboBox HorizontalAlignment="Left" Margin="705,10,0,0" VerticalAlignment="Top" Width="120">
+						<MenuItem Header="English"/>
+						<MenuItem Header="German"/>
+					</ComboBox>
 				</Grid>
 			</TabItem>
 
@@ -67,7 +55,10 @@
 
 			<TabItem Header="Upload Queue">
 				<Grid>
-
+					<ListBox Margin="0,0,0,38">
+					</ListBox>
+					<Button Content="Start" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Bottom" Width="100" Height="33"/>
+					<Button Content="Stop" HorizontalAlignment="Left" Margin="115,0,0,0" VerticalAlignment="Bottom" Width="100" Height="33"/>
 				</Grid>
 			</TabItem>
 
