@@ -50,7 +50,7 @@
 
 			<TabItem Header="Upload Presets">
 				<Grid>
-
+					<Button Content="Upload" HorizontalAlignment="Left" Margin="725,0,0,10" VerticalAlignment="Bottom" Width="100" Height="33" Click="Upload"/>
 				</Grid>
 			</TabItem>
 

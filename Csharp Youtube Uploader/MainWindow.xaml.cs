@@ -36,13 +36,6 @@ namespace Csharp_Youtube_Uploader
 		public MainWindow()
 		{
 			InitializeComponent();
-			MessageBox.Show("Hue?");
-<<<<<<< HEAD
-=======
-			//Upload("Test Video", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"C:\\Users\\Fabian\\AppData\\Roaming\\Skype\\My Skype Received Files\\Updatevideo 31.1.15.mkv").Wait();
->>>>>>> 5ccb34664b8a69d2e750ff3dca462a2058d700e4
-			MessageBox.Show("Hue");
-
 		}
 		private async Task Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path)
 		{
@@ -105,7 +98,10 @@ namespace Csharp_Youtube_Uploader
 			UploadQueue.Items.Add(UploadEntry.newUploadEntry());
 			
 		}
-
+		private void Upload(object sender, RoutedEventArgs e)
+		{
+			Upload("Test Video", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"C:\\Users\\Fabian\\AppData\\Roaming\\Skype\\My Skype Received Files\\Updatevideo 31.1.15.mkv").Wait();
+		}
 		
 	}
 }
