@@ -72,9 +72,9 @@ namespace Csharp_Youtube_Uploader
 			(sender as Button).ContextMenu.IsOpen = true;
 		}
 
-
-
-
-		
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			UploadQueue.Items.Add(UploadEntry.newUploadEntry());
+		}
 	}
 }
