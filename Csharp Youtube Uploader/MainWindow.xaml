@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:tb="http://www.hardcodet.net/taskbar"
 		xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        Title="C# Youtube Uploader" Height="1075" Width="1920" WindowStartupLocation="CenterScreen" WindowState="Maximized" Icon="Tray.ico" MinWidth="853" MinHeight="480">
+        Title="C# Youtube Uploader" Height="480" Width="853" WindowStartupLocation="CenterScreen" Icon="Tray.ico" MinWidth="853" MinHeight="480">
 
 	<Grid>
-	<!-- Start Tray-->
-	<tb:TaskbarIcon
+		<!-- Start Tray-->
+		<tb:TaskbarIcon
 		IconSource="/Tray.Ico">
 			<tb:TaskbarIcon.TrayToolTip>
 				<Border
@@ -28,36 +28,34 @@
 			</tb:TaskbarIcon.TrayToolTip>
 		</tb:TaskbarIcon>
 		<!-- End Tray-->
-		
-		<TabControl TabStripPlacement="Left" BorderBrush="#FF9E9E9E" BorderThickness="1,0,0,0">
-			<TabItem Name="account" Header="Account">
-				<TabItem.Content>
-					<TextBlock TextWrapping="WrapWithOverflow">
-						#WIP it hard
-					</TextBlock>
-				</TabItem.Content>
-			</TabItem>
-			
-			<!--Spacer-->
-			<TabItem Name="spacer" Header ="" IsEnabled="False">
+
+		<TabControl HorizontalAlignment="Left" VerticalAlignment="Top">
+			<TabItem Header="Account">
+				<Grid>
+					<TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Account Name:" VerticalAlignment="Top" FontSize="24" Foreground="#FF444444"/>
+					<TextBox Name="account_name" HorizontalAlignment="Left" Height="22" Margin="177,16,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Foreground="#FF444444"/>
+					<Button Content="Add Account!" HorizontalAlignment="Left" Margin="10,100,0,0" VerticalAlignment="Top" Width="162" FontSize="18" Foreground="#FF444444"/>
+					<TextBlock Margin="10,47,0,0" TextWrapping="Wrap" FontStyle="Italic" Foreground="Red" HorizontalAlignment="Left" VerticalAlignment="Top"><Run Text="no e-mail adress is required, this app is "/><Run Text="u"/><Run Text="sing Google's OAuth2"/></TextBlock>
+					<ListBox Height="209" Margin="10,182,0,0" BorderThickness="0" VerticalAlignment="Top"/>
+					<TextBlock HorizontalAlignment="Left" Margin="10,155,0,0" TextWrapping="Wrap" Text="Account List:" VerticalAlignment="Top" FontSize="20" Foreground="#FF444444"/>
+				</Grid>
 			</TabItem>
 
-			<TabItem Name="presets" Header="Upload Presets">
-				<TabItem.Content>
-					<TextBlock TextWrapping="WrapWithOverflow">
-						#WIP it hard
-					</TextBlock>
-				</TabItem.Content>
+			<TabItem Header="  " IsEnabled="False"/>
+
+			<TabItem Header="Upload Presets">
+				<Grid MinHeight="300">
+
+				</Grid>
 			</TabItem>
 
-			<TabItem Name="queue" Header="Upload Queue">
-				<TabItem.Content>
-					<TextBlock TextWrapping="WrapWithOverflow">
-						#WIP it hard
-					</TextBlock>
-				</TabItem.Content>
+			<TabItem Header="Upload Queue">
+				<Grid MinHeight="300">
+
+				</Grid>
 			</TabItem>
 
 		</TabControl>
+
 	</Grid>
 </Controls:MetroWindow>
