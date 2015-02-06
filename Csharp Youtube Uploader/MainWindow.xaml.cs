@@ -34,7 +34,7 @@ namespace Csharp_Youtube_Uploader
 			
 
 		}
-		private async Task Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus)
+		private async Task Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path)
 		{
 			var credential = await Google_auth.requestUserCredentialUpload();
 			var youtubrequest = Youtube_request.getYoutubeService(credential);
