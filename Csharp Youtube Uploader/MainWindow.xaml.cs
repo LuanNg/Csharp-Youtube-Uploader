@@ -37,22 +37,21 @@ namespace Csharp_Youtube_Uploader
 		{
 			InitializeComponent();
 		}
-		private async Task Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path)
+		private async void Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path)
 		{
 			var credential = await Google_auth.requestUserCredentialUpload();
 			var youtuberequest = Youtube_request.getYoutubeService(credential);
 			var video = video_constructor.constructVideo(Title,Description,tags,category,PrivacyStatus);
 			var filePath = path;
-			MessageBox.Show("Opening file...");
 			using (var file = new FileStream(filePath, FileMode.Open))
 			{
 				filesize = file.Length;
+				MessageBox.Show("" + filesize);
 				var uploadRequest = youtuberequest.Videos.Insert(video, "snippet,status", file, "video/*");
 				MessageBox.Show(uploadRequest.Body.ToString());
 				uploadRequest.ProgressChanged += videosInsertRequest_ProgressChanged;
 				uploadRequest.ResponseReceived += videosInsertRequest_ResponseReceived;
-				MessageBox.Show("Uploading...");
-				await uploadRequest.UploadAsync();
+				uploadRequest.Upload();
 			}
 
 		}
@@ -78,10 +77,9 @@ namespace Csharp_Youtube_Uploader
 						MessageBox.Show(help.ToString());
 					}
 				}
-				MessageBox.Show(obj.BytesSent.ToString());
-
 				System.Windows.Controls.Border test = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
 				test.FindChild<ProgressBar>("Progress").Value = obj.BytesSent / filesize;
+				test.FindChild<TextBlock>("Stats").Text = (obj.BytesSent / filesize).ToString() + " | " + obj.BytesSent + " | " + filesize;
 			}
 		}
 
@@ -100,7 +98,7 @@ namespace Csharp_Youtube_Uploader
 		}
 		private void Upload(object sender, RoutedEventArgs e)
 		{
-			Upload("Test Video", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"C:\\Users\\Fabian\\AppData\\Roaming\\Skype\\My Skype Received Files\\Updatevideo 31.1.15.mkv").Wait();
+			Upload("Test Video", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"E:\Hochgeladen\From Dust\From Dust #11  So und jetzt.mkv");
 		}
 		
 	}
