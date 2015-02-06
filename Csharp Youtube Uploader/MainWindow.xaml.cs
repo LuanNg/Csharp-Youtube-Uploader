@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Reflection;
+using MahApps.Metro;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -13,13 +15,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Google.Apis.Auth.OAuth2;
-using Google.Apis.Books.v1;
-using Google.Apis.Books.v1.Data;
 using Google.Apis.Services;
+using Google.Apis.Upload;
 using Google.Apis.Util.Store;
-using MahApps.Metro.Controls;
-using System.Threading;
 using Google.Apis.YouTube.v3;
+using Google.Apis.YouTube.v3.Data;
+using System.Threading;
+using System.IO;
+using MahApps.Metro.Controls;
 
 namespace Csharp_Youtube_Uploader
 {
@@ -37,9 +40,28 @@ namespace Csharp_Youtube_Uploader
 		private async Task Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path)
 		{
 			var credential = await Google_auth.requestUserCredentialUpload();
-			var youtubrequest = Youtube_request.getYoutubeService(credential);
+			var youtuberequest = Youtube_request.getYoutubeService(credential);
 			var video = video_constructor.constructVideo(Title,Description,tags,category,PrivacyStatus);
+			var filePath = path;
+			using (var file = new FileStream(filePath, FileMode.Open))
+			{
+			var uploadRequest = youtuberequest.Videos.Insert(video, "snippet,status", file, "video/*");
+			uploadRequest.ProgressChanged += videosInsertRequest_ProgressChanged;
+			uploadRequest.ResponseReceived += videosInsertRequest_ResponseReceived;
 
+			await uploadRequest.UploadAsync();
+		}
+
+		}
+
+		private void videosInsertRequest_ResponseReceived(Video obj)
+		{
+			throw new NotImplementedException();
+		}
+
+		private void videosInsertRequest_ProgressChanged(IUploadProgress obj)
+		{
+			throw new NotImplementedException();
 		}
 
 		private void LanguageButton_Click(object sender, RoutedEventArgs e)
@@ -50,7 +72,9 @@ namespace Csharp_Youtube_Uploader
 			(sender as Button).ContextMenu.IsOpen = true;
 		}
 
-		
 
+
+
+		
 	}
 }
