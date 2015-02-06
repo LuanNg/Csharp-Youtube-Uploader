@@ -40,7 +40,7 @@
 					<TextBlock HorizontalAlignment="Left" Margin="10,120,0,0" TextWrapping="Wrap" Text="Account List:" VerticalAlignment="Top" FontSize="20" Foreground="#FF444444"/>
 					<Button Margin="725,11,10,359"
 							Click="LanguageButton_Click"
-							ContextMenuService.IsEnabled="False" Height="31" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center">
+							ContextMenuService.IsEnabled="False" Height="31" Width="100" HorizontalAlignment="Right" VerticalAlignment="Top">
 						<Button.Content>
 							<StackPanel Orientation="Horizontal">
 								<TextBlock Text="Language"/>
@@ -60,13 +60,13 @@
 			<TabItem Header="  " IsEnabled="False"/>
 
 			<TabItem Header="Upload Presets">
-				<Grid MinHeight="300">
+				<Grid>
 
 				</Grid>
 			</TabItem>
 
 			<TabItem Header="Upload Queue">
-				<Grid MinHeight="300">
+				<Grid>
 
 				</Grid>
 			</TabItem>
