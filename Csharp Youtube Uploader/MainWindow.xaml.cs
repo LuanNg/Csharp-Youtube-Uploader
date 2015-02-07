@@ -39,8 +39,8 @@ namespace Csharp_Youtube_Uploader
 		}
 		private async void Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path)
 		{
-			UploadQueue.Items.Add(UploadEntry.newUploadEntry());	//Upload Queue Entry
-			TabControl.SelectedIndex = 3;							//Switches Tab to Upload Queue
+			UploadQueue.Items.Add(UploadEntry.newUploadEntry(Title));	//Upload Queue Entry
+			TabControl.SelectedIndex = 3;								//Switches Tab to Upload Queue
 
 			var credential = await Google_auth.requestUserCredentialUpload();
 			var youtuberequest = Youtube_request.getYoutubeService(credential);
@@ -53,7 +53,6 @@ namespace Csharp_Youtube_Uploader
 				uploadRequest.ProgressChanged += videosInsertRequest_ProgressChanged;
 				await uploadRequest.UploadAsync();
 			}
-
 		}
 
 		private void videosInsertRequest_ProgressChanged(IUploadProgress obj)
@@ -74,13 +73,13 @@ namespace Csharp_Youtube_Uploader
 				}
 				Dispatcher.BeginInvoke(
 				new Action(() => {
-					System.Windows.Controls.Border test = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
-					test.FindChild<ProgressBar>("Progress").Value = obj.BytesSent / filesize;
-					string[] Stats = test.FindChild<TextBlock>("Stats").Text.Split('\n');
+					System.Windows.Controls.Border UploadEntry = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
+					UploadEntry.FindChild<ProgressBar>("Progress").Value = obj.BytesSent / filesize;
+					string[] Stats = UploadEntry.FindChild<TextBlock>("Stats").Text.Split('\n');
 					DateTime StartTime = DateTime.Parse(Stats[2].Substring(13));
 					TimeSpan ElapsedTime = DateTime.Now - StartTime;
 					TimeSpan RemainingTime = TimeSpan.FromTicks((long)(ElapsedTime.Ticks * (100 - (obj.BytesSent / filesize))));
-					test.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n" + Math.Round(obj.BytesSent / filesize, 3) + "% \n" + Stats[2] + "\nFinished in: " + RemainingTime.ToString(@"dd\.hh\:mm\:ss");
+					UploadEntry.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n" + Math.Round(obj.BytesSent / filesize, 3) + "%\n" + Stats[2] + "\nFinished in: " + RemainingTime.ToString(@"dd\.hh\:mm\:ss");
 					})
 				);
 				}

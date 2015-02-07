@@ -18,7 +18,7 @@ namespace Csharp_Youtube_Uploader
 {
 	class UploadEntry
 	{
-		public static Border newUploadEntry()
+		public static Border newUploadEntry(string Title)
 		{
 			Grid UploadEntry = new Grid()
 			{
@@ -29,6 +29,7 @@ namespace Csharp_Youtube_Uploader
 
 			Border Border = new Border()
 			{
+				Name  = Title,
 				Padding = new Thickness(2),
 				Child = UploadEntry,
 			};
@@ -49,6 +50,7 @@ namespace Csharp_Youtube_Uploader
 			ProgressBar Progress = new ProgressBar()
 			{
 				Name = "Progress",
+				Value = 0,
 			};
 			Thickness ProgressMargin = new Thickness();
 			ProgressMargin.Left = 120;
@@ -62,7 +64,7 @@ namespace Csharp_Youtube_Uploader
 			TextBlock Stats = new TextBlock()
 			{
 				Name = "Stats",
-				Text = "test\n0% \nStart Time: " + DateTime.Now + "\nFinished in: ",
+				Text = Title,
 			};
 			Thickness StatsMargin = new Thickness();
 			StatsMargin.Left = 660;
