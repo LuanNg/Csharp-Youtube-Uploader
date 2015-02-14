@@ -29,7 +29,7 @@ namespace Csharp_Youtube_Uploader
 
 			Border Border = new Border()
 			{
-				Name  = Title,
+				//Name  = Title,
 				Padding = new Thickness(2),
 				Child = UploadEntry,
 			};
@@ -64,7 +64,7 @@ namespace Csharp_Youtube_Uploader
 			TextBlock Stats = new TextBlock()
 			{
 				Name = "Stats",
-				Text = Title,
+				Text = Title + "\n0%\nStart Time: " + DateTime.Now + "\nFinished at:",
 			};
 			Thickness StatsMargin = new Thickness();
 			StatsMargin.Left = 660;

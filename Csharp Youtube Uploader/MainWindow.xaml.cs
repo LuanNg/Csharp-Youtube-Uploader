@@ -23,6 +23,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
 namespace Csharp_Youtube_Uploader
 {
@@ -39,9 +40,6 @@ namespace Csharp_Youtube_Uploader
 		}
 		private async void Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path)
 		{
-			UploadQueue.Items.Add(UploadEntry.newUploadEntry(Title));	//Upload Queue Entry
-			TabControl.SelectedIndex = 3;								//Switches Tab to Upload Queue
-
 			var credential = await Google_auth.requestUserCredentialUpload();
 			var youtuberequest = Youtube_request.getYoutubeService(credential);
 			var video = video_constructor.constructVideo(Title,Description,tags,category,PrivacyStatus);
@@ -59,7 +57,14 @@ namespace Csharp_Youtube_Uploader
 		{
 			if (obj.Status == UploadStatus.Completed)
 			{
-				MessageBox.Show("Upload completed");
+				Dispatcher.BeginInvoke(
+				new Action(() => {
+					System.Windows.Controls.Border UploadEntry = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
+					UploadEntry.FindChild<ProgressBar>("Progress").Value = 100;
+					string[] Stats = UploadEntry.FindChild<TextBlock>("Stats").Text.Split('\n');
+					UploadEntry.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n100%\n" + Stats[2] + "\nFinished";
+					})
+				);
 			}
 			else
 			{
@@ -75,8 +80,8 @@ namespace Csharp_Youtube_Uploader
 				new Action(() => {
 					System.Windows.Controls.Border UploadEntry = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
 					UploadEntry.FindChild<ProgressBar>("Progress").Value = obj.BytesSent / filesize;
-					string[] Stats = UploadEntry.FindChild<TextBlock>("Stats").Text.Split('\n');
-					DateTime StartTime = DateTime.Parse(Stats[2].Substring(13));
+					string []Stats = UploadEntry.FindChild<TextBlock>("Stats").Text.Split('\n');
+					DateTime StartTime = DateTime.Parse(Stats[2].Substring(12));
 					TimeSpan ElapsedTime = DateTime.Now - StartTime;
 					TimeSpan RemainingTime = TimeSpan.FromTicks((long)(ElapsedTime.Ticks * (100 - (obj.BytesSent / filesize))));
 					UploadEntry.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n" + Math.Round(obj.BytesSent / filesize, 3) + "%\n" + Stats[2] + "\nFinished in: " + RemainingTime.ToString(@"dd\.hh\:mm\:ss");
@@ -95,8 +100,74 @@ namespace Csharp_Youtube_Uploader
 
 		private void Upload(object sender, RoutedEventArgs e)
 		{
-			Upload("Test Video23", "Testing", new string[] { "hue", "huehue" }, video_constructor.Categories.Events, "unlisted", @"E:\Hochgeladen\From Dust\From Dust #11  So und jetzt.mkv");
+			if (!String.IsNullOrEmpty(FileName.Text))
+			{
+				string Title = VideoTitle.Text;
+				UploadQueue.Items.Add(UploadEntry.newUploadEntry(Title));	//Upload Queue Entry
+				TabControl.SelectedIndex = 3;								//Switches Tab to Upload Queue
+				Upload(Title, VideoDescription.Text, VideoTags.Text.Split(','), video_constructor.Categories.Events, GetPrivacyStatus(), FileName.Text);
+			}
+			else
+			{
+				MessageBox.Show("Please Select a File");
+			}
 		}
-		
+
+		private void FileButton_Click(object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog dlg = new OpenFileDialog();
+
+			Nullable<bool> result = dlg.ShowDialog();
+			if (result == true)
+			{
+				string filename = dlg.FileName;
+				FileName.Text = filename;
+
+			}
+		}
+
+		private string GetPrivacyStatus()
+		{
+			string PrivacyStatus = "";
+
+			if (PrivacySettings.SelectionBoxItem.ToString() == "Public")
+			{
+				PrivacyStatus = "public";
+			}
+			if (PrivacySettings.SelectionBoxItem.ToString() == "Unlisted")
+			{
+				PrivacyStatus = "unlisted";
+			}
+			if (PrivacySettings.SelectionBoxItem.ToString() == "Private")
+			{
+				PrivacyStatus = "private";
+			}
+
+			return PrivacyStatus;
+		}
+
+		private void VideoTitle_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			VideoTitleHeader.Text = "Title: ( " + VideoTitle.Text.Length + " / 100 )";
+		}
+
+		private void VideoDescription_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			VideoDescriptionHeader.Text = "Description: ( " + VideoDescription.Text.Length + " / 5000 )";
+		}
+
+		private void VideoTags_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			//Adjusts Max Length based on # of , since those are not counted
+			VideoTags.MaxLength = 500 + VideoTags.Text.Split(',').Length - 1;
+
+			string tags = VideoTags.Text.Replace(",", string.Empty);
+			VideoTagsHeader.Text = "Tags: ( " + tags.Length + " / 500 )";
+		}
+
+		private void FileName_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			VideoTitle.Text = System.IO.Path.GetFileNameWithoutExtension(FileName.Text);
+		}
 	}
 }

@@ -51,6 +51,25 @@
 			<TabItem Header="Upload Presets">
 				<Grid>
 					<Button Content="Upload" HorizontalAlignment="Left" Margin="725,0,0,10" VerticalAlignment="Bottom" Width="100" Height="33" Click="Upload"/>
+
+					<TextBox Name="FileName" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="593" IsEnabled="False" Foreground="#FF444444" TextChanged="FileName_TextChanged"/>
+					<Button Name="FileButton" Content="Select File" HorizontalAlignment="Left" Margin="608,11,0,0" VerticalAlignment="Top" Width="75" Click="FileButton_Click"/>
+
+					<ComboBox Name="PrivacySettings" HorizontalAlignment="Left" Margin="705,10,0,0" VerticalAlignment="Top" Width="120">
+						<ComboBoxItem IsSelected="True">Public</ComboBoxItem>
+						<ComboBoxItem>Unlisted</ComboBoxItem>
+						<ComboBoxItem>Private</ComboBoxItem>
+					</ComboBox>
+
+					<TextBox Name="VideoTitle" MaxLength="100" HorizontalAlignment="Left" Height="23" Margin="161,51,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="664" Foreground="#FF444444" TextChanged="VideoTitle_TextChanged" FontSize="10"/>
+					<TextBlock Name="VideoTitleHeader" Text="Title: ( 0 / 100 )" HorizontalAlignment="Left" Margin="12,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="14" Width="95" FontWeight="Bold" FontFamily="Segoe UI, Lucida Sans Unicode, Verdana" FontSize="11"/>
+
+					<TextBox Name="VideoDescription" MaxLength="5000" HorizontalAlignment="Left" Height="120" Margin="161,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="664" Foreground="#FF444444" TextChanged="VideoDescription_TextChanged" FontSize="10" VerticalScrollBarVisibility="Auto"/>
+					<TextBlock x:Name="VideoDescriptionHeader" HorizontalAlignment="Left" Margin="12,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="14" Width="144" FontWeight="Bold" FontFamily="Segoe UI, Lucida Sans Unicode, Verdana" FontSize="11" Text="Description: ( 0 / 5000 )"/>
+
+					<TextBox Name="VideoTags" MaxLength="5000" HorizontalAlignment="Left" Height="85" Margin="161,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="664" Foreground="#FF444444" TextChanged="VideoTags_TextChanged" FontSize="10" VerticalScrollBarVisibility="Auto"/>
+					<TextBlock x:Name="VideoTagsHeader" HorizontalAlignment="Left" Margin="10,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="14" Width="144" FontWeight="Bold" FontFamily="Segoe UI, Lucida Sans Unicode, Verdana" FontSize="11" Text="Tags: ( 0 / 500 )"/>
+
 				</Grid>
 			</TabItem>
 
