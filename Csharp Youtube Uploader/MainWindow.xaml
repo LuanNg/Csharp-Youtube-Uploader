@@ -35,7 +35,7 @@
 				<Grid>
 					<TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Account Name:" VerticalAlignment="Top" FontSize="24" Foreground="#FF444444"/>
 					<TextBox Name="account_name" HorizontalAlignment="Left" Height="22" Margin="177,16,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Foreground="#FF444444"/>
-					<Button Content="Add Account!" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" Width="162" FontSize="18" Foreground="#FF444444"/>
+					<Button Content="Add Account!" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" Width="162" FontSize="18" Foreground="#FF444444" Click="Add_Account"/>
 					<TextBlock Margin="10,47,0,0" TextWrapping="Wrap" FontStyle="Italic" Foreground="Red" HorizontalAlignment="Left" VerticalAlignment="Top"><Run Text="no e-mail adress is required, this app is "/><Run Text="u"/><Run Text="sing Google's OAuth2"/></TextBlock>
 					<ListBox Height="244" Margin="10,152,755,0" BorderThickness="0" VerticalAlignment="Top"/>
 					<TextBlock HorizontalAlignment="Left" Margin="10,120,0,0" TextWrapping="Wrap" Text="Account List:" VerticalAlignment="Top" FontSize="20" Foreground="#FF444444"/>

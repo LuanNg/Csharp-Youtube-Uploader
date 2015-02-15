@@ -72,6 +72,17 @@ namespace Csharp_Youtube_Uploader
 
 			UploadEntry.Children.Add(Stats);
 
+			TextBlock VideoUri = new TextBlock()
+			{
+				Name = "VideoUri",
+			};
+			Thickness VideoUriMargin = new Thickness();
+			VideoUriMargin.Left = 120;
+			VideoUriMargin.Top = 40;
+			VideoUri.Margin = VideoUriMargin;
+
+			UploadEntry.Children.Add(VideoUri);
+
 			return Border;
 		}
 	}

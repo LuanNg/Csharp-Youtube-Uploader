@@ -48,46 +48,92 @@ namespace Csharp_Youtube_Uploader
 			{
 				filesize = file.Length;
 				var uploadRequest = youtuberequest.Videos.Insert(video, "snippet,status", file, "video/*");
-				uploadRequest.ProgressChanged += videosInsertRequest_ProgressChanged;
+				uploadRequest.ProgressChanged += new Action<Google.Apis.Upload.IUploadProgress>((p) => ProgressHandler(p, uploadRequest));
+				uploadRequest.ResponseReceived += uploadRequest_ResponseReceived;
 				await uploadRequest.UploadAsync();
 			}
 		}
 
+		private void ProgressHandler(IUploadProgress obj, VideosResource.InsertMediaUpload video)
+		{
+			if (obj.Status == UploadStatus.Failed)
+			{
+				MessageBox.Show(obj.Exception.Message);
+				foreach (var help in obj.Exception.Data.Values)
+				{
+					MessageBox.Show(help.ToString());
+				}
+			}
+			if (obj.Status == UploadStatus.Uploading)
+			{
+				Dispatcher.BeginInvoke(
+				new Action(() =>
+				{
+					for (int i = 0; i < UploadQueue.Items.Count; i++)
+					{
+						System.Windows.Controls.Border UploadEntry = UploadQueue.Items.GetItemAt(i) as System.Windows.Controls.Border;
+						if (UploadEntry.FindChild<TextBlock>("Stats").Text.Contains(video.Body.Snippet.Title))
+						{
+							UploadEntry.FindChild<ProgressBar>("Progress").Value = obj.BytesSent / filesize;
+							string[] Stats = UploadEntry.FindChild<TextBlock>("Stats").Text.Split('\n');
+							DateTime StartTime = DateTime.Parse(Stats[2].Substring(12));
+							TimeSpan ElapsedTime = DateTime.Now - StartTime;
+							TimeSpan RemainingTime = TimeSpan.FromTicks((long)(ElapsedTime.Ticks * (100 - (obj.BytesSent / filesize) * 100)));
+							UploadEntry.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n" + Math.Round(obj.BytesSent / filesize, 3) + "%\n" + Stats[2] + "\nFinished in: " + RemainingTime.ToString(@"dd\.hh\:mm\:ss");
+						}
+					}
+				})
+			);
+			}
+		}
+
+		private void uploadRequest_ResponseReceived(Video obj)
+		{
+			Dispatcher.BeginInvoke(
+				new Action(() => {
+					for (int i=0; i< UploadQueue.Items.Count; i++)
+					{	System.Windows.Controls.Border UploadEntry = UploadQueue.Items.GetItemAt(i) as System.Windows.Controls.Border;
+						if(UploadEntry.FindChild<TextBlock>("Stats").Text.Contains(obj.Snippet.Title))
+						{
+							UploadEntry.FindChild<ProgressBar>("Progress").Value = 100;
+							string[] Stats = UploadEntry.FindChild<TextBlock>("Stats").Text.Split('\n');
+							UploadEntry.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n100%\n" + Stats[2] + "\nFinished";
+							UploadEntry.FindChild<TextBlock>("VideoUri").Text = "http://youtube.com/watch?v=" + obj.Id;
+							UploadEntry.FindChild<TextBlock>("VideoUri").MouseDown += new MouseButtonEventHandler((s,e) => VideoUri_MouseDown(s,e,obj));
+						}
+					}
+				})
+				);
+		}
+
+		private void VideoUri_MouseDown(object s, EventArgs e, Video obj)
+		{
+			System.Diagnostics.Process.Start("http://youtube.com/watch?v=" + obj.Id);
+		}
+
 		private void videosInsertRequest_ProgressChanged(IUploadProgress obj)
 		{
-			if (obj.Status == UploadStatus.Completed)
+			if (obj.Status == UploadStatus.Failed)
 			{
-				Dispatcher.BeginInvoke(
-				new Action(() => {
-					System.Windows.Controls.Border UploadEntry = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
-					UploadEntry.FindChild<ProgressBar>("Progress").Value = 100;
-					string[] Stats = UploadEntry.FindChild<TextBlock>("Stats").Text.Split('\n');
-					UploadEntry.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n100%\n" + Stats[2] + "\nFinished";
-					})
-				);
-			}
-			else
-			{
-				if (obj.Status == UploadStatus.Failed)
+				MessageBox.Show(obj.Exception.Message);
+				foreach (var help in obj.Exception.Data.Values)
 				{
-					MessageBox.Show(obj.Exception.Message);
-					foreach (var help in obj.Exception.Data.Values)
-					{
-						MessageBox.Show(help.ToString());
-					}
+					MessageBox.Show(help.ToString());
 				}
-				Dispatcher.BeginInvoke(
+			}
+			if(obj.Status == UploadStatus.Uploading)
+			{	Dispatcher.BeginInvoke(
 				new Action(() => {
 					System.Windows.Controls.Border UploadEntry = UploadQueue.Items.GetItemAt(0) as System.Windows.Controls.Border;
 					UploadEntry.FindChild<ProgressBar>("Progress").Value = obj.BytesSent / filesize;
 					string []Stats = UploadEntry.FindChild<TextBlock>("Stats").Text.Split('\n');
 					DateTime StartTime = DateTime.Parse(Stats[2].Substring(12));
 					TimeSpan ElapsedTime = DateTime.Now - StartTime;
-					TimeSpan RemainingTime = TimeSpan.FromTicks((long)(ElapsedTime.Ticks * (100 - (obj.BytesSent / filesize))));
+					TimeSpan RemainingTime = TimeSpan.FromTicks((long)(ElapsedTime.Ticks * (100 - (obj.BytesSent / filesize)*100)));
 					UploadEntry.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n" + Math.Round(obj.BytesSent / filesize, 3) + "%\n" + Stats[2] + "\nFinished in: " + RemainingTime.ToString(@"dd\.hh\:mm\:ss");
-					})
-				);
-				}
+				})
+			);
+			}
 		}
 
 		private void LanguageButton_Click(object sender, RoutedEventArgs e)
@@ -168,6 +214,11 @@ namespace Csharp_Youtube_Uploader
 		private void FileName_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			VideoTitle.Text = System.IO.Path.GetFileNameWithoutExtension(FileName.Text);
+		}
+
+		private void Add_Account(object sender, RoutedEventArgs e)
+		{
+
 		}
 	}
 }

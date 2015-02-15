@@ -20,26 +20,17 @@ namespace Csharp_Youtube_Uploader
 		static UserCredential userCred;
 		public static async Task<UserCredential> requestUserCredentialUpload()
 		{
-				return await GoogleWebAuthorizationBroker.AuthorizeAsync(
-					new ClientSecrets
-					{
-						ClientId = "931649744860-vbhhdcqmahkkltvj84otg8t8a2iffqlq.apps.googleusercontent.com",
-						ClientSecret = "Aj1OCCqh8Qgp2sVYZAQwZKm9"
-					}, 
-					new[] { YouTubeService.Scope.YoutubeUpload, YouTubeService.Scope.Youtube, YouTubeService.Scope.Youtubepartner },
-					"user",
-					CancellationToken.None,
-					new FileDataStore("C#YTUploader/Youtube.Auth.Store")
-					);
-				
-
-					
-				
-			
+			return await GoogleWebAuthorizationBroker.AuthorizeAsync(
+				new ClientSecrets
+				{
+					ClientId = "931649744860-vbhhdcqmahkkltvj84otg8t8a2iffqlq.apps.googleusercontent.com",
+					ClientSecret = "Aj1OCCqh8Qgp2sVYZAQwZKm9"
+				},
+				new[] { YouTubeService.Scope.YoutubeUpload, YouTubeService.Scope.Youtube, YouTubeService.Scope.Youtubepartner },
+				"user",
+				CancellationToken.None,
+				new FileDataStore("C#YTUploader/Youtube.Auth.Store")
+				);
 		}
-		
-		
-		
-
 	}
 }
