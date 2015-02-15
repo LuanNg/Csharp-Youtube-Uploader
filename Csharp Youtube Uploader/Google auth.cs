@@ -18,7 +18,7 @@ namespace Csharp_Youtube_Uploader
 	class Google_auth
 	{
 		static UserCredential userCred;
-		public static async Task<UserCredential> requestUserCredentialUpload()
+		public static async Task<UserCredential> requestUserCredentialUpload(string ProfileName)
 		{
 			return await GoogleWebAuthorizationBroker.AuthorizeAsync(
 				new ClientSecrets
@@ -27,7 +27,7 @@ namespace Csharp_Youtube_Uploader
 					ClientSecret = "Aj1OCCqh8Qgp2sVYZAQwZKm9"
 				},
 				new[] { YouTubeService.Scope.YoutubeUpload, YouTubeService.Scope.Youtube, YouTubeService.Scope.Youtubepartner },
-				"user",
+				ProfileName,
 				CancellationToken.None,
 				new FileDataStore("C#YTUploader/Youtube.Auth.Store")
 				);

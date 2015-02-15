@@ -37,10 +37,11 @@ namespace Csharp_Youtube_Uploader
 		public MainWindow()
 		{
 			InitializeComponent();
+			updateProfileLists();
 		}
 		private async void Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path)
 		{
-			var credential = await Google_auth.requestUserCredentialUpload();
+			var credential = await Google_auth.requestUserCredentialUpload(ProfileNameBox.Text);
 			var youtuberequest = Youtube_request.getYoutubeService(credential);
 			var video = video_constructor.constructVideo(Title,Description,tags,category,PrivacyStatus);
 			var filePath = path;
@@ -216,9 +217,78 @@ namespace Csharp_Youtube_Uploader
 			VideoTitle.Text = System.IO.Path.GetFileNameWithoutExtension(FileName.Text);
 		}
 
-		private void Add_Account(object sender, RoutedEventArgs e)
+		private async void Add_Account(object sender, RoutedEventArgs e)
 		{
+			await Google_auth.requestUserCredentialUpload(ProfileNameBox.Text);
+			List<string> ProfileList = readProfileList();
+			ProfileList.Add(ProfileNameBox.Text);
+			saveProfileList(ProfileList);
+			updateProfileLists();
+		}
 
+		private List<string> readProfileList()
+		{
+			string saveFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\ProfileList.lst";
+			List<string> ProfileList = new List<string>();
+			try
+			{
+				using (Stream stream = File.Open(saveFile, FileMode.Open))
+				{
+					var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+					ProfileList = (List<string>)bformatter.Deserialize(stream);
+				}
+			}
+			catch (FileNotFoundException)
+			{ }
+			return ProfileList;
+		}
+
+		private void saveProfileList(List<string> ProfileList)
+		{
+			string saveFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\ProfileList.lst";
+			using (Stream stream = File.Open(saveFile, FileMode.Create))
+			{
+				var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+				bformatter.Serialize(stream, ProfileList);
+			}
+		}
+
+		private void updateProfileLists()
+		{
+			ProfileComboBox.Items.Clear();
+			ProfileList.Items.Clear();
+			foreach (string ProfileName in readProfileList())
+			{
+				ComboBoxItem Profile = new ComboBoxItem();
+				Profile.Content = ProfileName;
+
+				ListBoxItem Profile2 = new ListBoxItem();
+				Profile2.Content = ProfileName;
+				ProfileComboBox.Items.Add(Profile);
+				ProfileList.Items.Add(Profile2);
+			}
+		}
+
+		private void ProfileList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			ProfileList.SelectionChanged -= ProfileList_SelectionChanged;
+			RemoveProfile(e.AddedItems[0].ToString().Replace("System.Windows.Controls.ListBoxItem: ", string.Empty));
+			ProfileList.SelectionChanged += ProfileList_SelectionChanged;
+		}
+
+		private void RemoveProfile(string ProfileName)
+		{
+			string ConfirmationBox = "Do you really want to delete the Profile\n" + ProfileName + " ?";
+			MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show(ConfirmationBox, "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
+			if (messageBoxResult == MessageBoxResult.Yes)
+			{
+				List<string> ProfileListstring = readProfileList();
+				ProfileListstring.Remove(ProfileName);
+				File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\Youtube.Auth.Store\Google.Apis.Auth.OAuth2.Responses.TokenResponse-" + ProfileName);
+				saveProfileList(ProfileListstring);
+				updateProfileLists();
+			}
 		}
 	}
 }

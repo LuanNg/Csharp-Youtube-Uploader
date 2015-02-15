@@ -33,16 +33,15 @@
 		<TabControl Name="TabControl">
 			<TabItem Header="Account">
 				<Grid>
-					<TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Account Name:" VerticalAlignment="Top" FontSize="24" Foreground="#FF444444"/>
-					<TextBox Name="account_name" HorizontalAlignment="Left" Height="22" Margin="177,16,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="245" Foreground="#FF444444"/>
-					<Button Content="Add Account!" HorizontalAlignment="Left" Margin="10,79,0,0" VerticalAlignment="Top" Width="162" FontSize="18" Foreground="#FF444444" Click="Add_Account"/>
-					<TextBlock Margin="10,47,0,0" TextWrapping="Wrap" FontStyle="Italic" Foreground="Red" HorizontalAlignment="Left" VerticalAlignment="Top"><Run Text="no e-mail adress is required, this app is "/><Run Text="u"/><Run Text="sing Google's OAuth2"/></TextBlock>
+					<Button Content="New Profile" HorizontalAlignment="Left" Margin="400,10,0,0" VerticalAlignment="Top" Width="162" FontSize="18" Foreground="#FF444444" Click="Add_Account"/>
 					<ListBox Height="244" Margin="10,152,755,0" BorderThickness="0" VerticalAlignment="Top"/>
-					<TextBlock HorizontalAlignment="Left" Margin="10,120,0,0" TextWrapping="Wrap" Text="Account List:" VerticalAlignment="Top" FontSize="20" Foreground="#FF444444"/>
+					<TextBlock HorizontalAlignment="Left" Margin="10,51,0,0" TextWrapping="Wrap" Text="Account List:" VerticalAlignment="Top" FontSize="20" Foreground="#FF444444"/>
 					<ComboBox HorizontalAlignment="Left" Margin="705,10,0,0" VerticalAlignment="Top" Width="120">
 						<MenuItem Header="English"/>
 						<MenuItem Header="German"/>
 					</ComboBox>
+					<TextBox Name="ProfileNameBox" HorizontalAlignment="Left" Height="36" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="385" FontSize="20"/>
+					<ListBox Name="ProfileList" HorizontalAlignment="Left" Height="318" Margin="10,83,0,0" VerticalAlignment="Top" Width="385" SelectionChanged="ProfileList_SelectionChanged"/>
 				</Grid>
 			</TabItem>
 
@@ -68,8 +67,9 @@
 					<TextBlock x:Name="VideoDescriptionHeader" HorizontalAlignment="Left" Margin="12,82,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="14" Width="144" FontWeight="Bold" FontFamily="Segoe UI, Lucida Sans Unicode, Verdana" FontSize="11" Text="Description: ( 0 / 5000 )"/>
 
 					<TextBox Name="VideoTags" MaxLength="5000" HorizontalAlignment="Left" Height="85" Margin="161,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="664" Foreground="#FF444444" TextChanged="VideoTags_TextChanged" FontSize="10" VerticalScrollBarVisibility="Auto"/>
-					<TextBlock x:Name="VideoTagsHeader" HorizontalAlignment="Left" Margin="10,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="14" Width="144" FontWeight="Bold" FontFamily="Segoe UI, Lucida Sans Unicode, Verdana" FontSize="11" Text="Tags: ( 0 / 500 )"/>
-
+					<TextBlock Name="VideoTagsHeader" HorizontalAlignment="Left" Margin="10,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="14" Width="144" FontWeight="Bold" FontFamily="Segoe UI, Lucida Sans Unicode, Verdana" FontSize="11" Text="Tags: ( 0 / 500 )"/>
+					<TextBlock HorizontalAlignment="Left" Margin="12,300,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="14" Width="144" FontWeight="Bold" FontFamily="Segoe UI, Lucida Sans Unicode, Verdana" FontSize="11" Text="Upload To:"/>
+					<ComboBox Name="ProfileComboBox" HorizontalAlignment="Left" Margin="161,300,0,0" VerticalAlignment="Top" Width="120"/>
 				</Grid>
 			</TabItem>
 
