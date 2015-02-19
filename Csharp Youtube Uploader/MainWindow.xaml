@@ -4,7 +4,7 @@
 		xmlns:tb="http://www.hardcodet.net/taskbar"
 		xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 		xmlns:properties="clr-namespace:Csharp_Youtube_Uploader.Properties"
-        Title="C# Youtube Uploader" Height="480" Width="853" WindowStartupLocation="CenterScreen" MinWidth="853" MinHeight="480" Icon="Tray.ico">
+        Title="C# Youtube Uploader" Height="563" Width="1000" WindowStartupLocation="CenterScreen" MinWidth="853" MinHeight="480" Icon="Tray.ico" Closing="SaveUploads">
 
 	<Grid>
 		<!-- Start Tray-->
@@ -48,8 +48,8 @@
 			<TabItem Header="  " IsEnabled="False"/>
 
 			<TabItem Header="Upload Presets">
-				<Grid>
-					<Button Content="Upload" HorizontalAlignment="Left" Margin="725,0,0,10" VerticalAlignment="Bottom" Width="100" Height="33" Click="Upload"/>
+				<Grid Name="UploadPreset">
+					<Button Content="Upload" HorizontalAlignment="Left" Margin="872,0,0,10" VerticalAlignment="Bottom" Width="100" Height="33" Click="Upload"/>
 
 					<TextBox Name="FileName" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="593" IsEnabled="False" Foreground="#FF444444" TextChanged="FileName_TextChanged"/>
 					<Button Name="FileButton" Content="Select File" HorizontalAlignment="Left" Margin="608,11,0,0" VerticalAlignment="Top" Width="75" Click="FileButton_Click"/>

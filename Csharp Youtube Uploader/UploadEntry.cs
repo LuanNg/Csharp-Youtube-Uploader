@@ -55,7 +55,7 @@ namespace Csharp_Youtube_Uploader
 			Thickness ProgressMargin = new Thickness();
 			ProgressMargin.Left = 120;
 			ProgressMargin.Top = 19;
-			ProgressMargin.Right = 180;
+			ProgressMargin.Right = 250;
 			ProgressMargin.Bottom = 19;
 			Progress.Margin = ProgressMargin;
 
@@ -64,10 +64,10 @@ namespace Csharp_Youtube_Uploader
 			TextBlock Stats = new TextBlock()
 			{
 				Name = "Stats",
-				Text = Title + "\n0%\nStart Time: " + DateTime.Now + "\nFinished at:",
+				Text = Title + "\n0%\nStart Time:\t" + DateTime.Now + "\nFinished in:\t",
 			};
 			Thickness StatsMargin = new Thickness();
-			StatsMargin.Left = 660;
+			StatsMargin.Left = 750;
 			Stats.Margin = StatsMargin;
 
 			UploadEntry.Children.Add(Stats);

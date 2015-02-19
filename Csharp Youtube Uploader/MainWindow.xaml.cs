@@ -24,6 +24,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using Newtonsoft;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Csharp_Youtube_Uploader
 {
@@ -33,15 +36,16 @@ namespace Csharp_Youtube_Uploader
 	public partial class MainWindow : MetroWindow
 	{
 		double filesize;
+		List<VideosResource.InsertMediaUpload> UploadItems = new List<VideosResource.InsertMediaUpload>();
 		
 		public MainWindow()
 		{
 			InitializeComponent();
 			updateProfileLists();
 		}
-		private async void Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path)
+		private async void Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path, string ProfileName)
 		{
-			var credential = await Google_auth.requestUserCredentialUpload(ProfileNameBox.Text);
+			var credential = await Google_auth.requestUserCredentialUpload(ProfileName);
 			var youtuberequest = Youtube_request.getYoutubeService(credential);
 			var video = video_constructor.constructVideo(Title,Description,tags,category,PrivacyStatus);
 			var filePath = path;
@@ -53,6 +57,13 @@ namespace Csharp_Youtube_Uploader
 				uploadRequest.ResponseReceived += uploadRequest_ResponseReceived;
 				await uploadRequest.UploadAsync();
 			}
+		}
+
+		private async void ResumeUpload(VideosResource.InsertMediaUpload uploadRequest)
+		{
+			uploadRequest.ProgressChanged += new Action<Google.Apis.Upload.IUploadProgress>((p) => ProgressHandler(p, uploadRequest));
+			uploadRequest.ResponseReceived += uploadRequest_ResponseReceived;
+			await uploadRequest.ResumeAsync();
 		}
 
 		private void ProgressHandler(IUploadProgress obj, VideosResource.InsertMediaUpload video)
@@ -80,7 +91,7 @@ namespace Csharp_Youtube_Uploader
 							DateTime StartTime = DateTime.Parse(Stats[2].Substring(12));
 							TimeSpan ElapsedTime = DateTime.Now - StartTime;
 							TimeSpan RemainingTime = TimeSpan.FromTicks((long)(ElapsedTime.Ticks * (100 - (obj.BytesSent / filesize) * 100)));
-							UploadEntry.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n" + Math.Round(obj.BytesSent / filesize, 3) + "%\n" + Stats[2] + "\nFinished in: " + RemainingTime.ToString(@"dd\.hh\:mm\:ss");
+							UploadEntry.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n" + Math.Round(obj.BytesSent / filesize, 3) + "%\n" + Stats[2] + "\nFinished in:\t" + RemainingTime.ToString(@"dd\.hh\:mm\:ss");
 						}
 					}
 				})
@@ -131,7 +142,7 @@ namespace Csharp_Youtube_Uploader
 					DateTime StartTime = DateTime.Parse(Stats[2].Substring(12));
 					TimeSpan ElapsedTime = DateTime.Now - StartTime;
 					TimeSpan RemainingTime = TimeSpan.FromTicks((long)(ElapsedTime.Ticks * (100 - (obj.BytesSent / filesize)*100)));
-					UploadEntry.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n" + Math.Round(obj.BytesSent / filesize, 3) + "%\n" + Stats[2] + "\nFinished in: " + RemainingTime.ToString(@"dd\.hh\:mm\:ss");
+					UploadEntry.FindChild<TextBlock>("Stats").Text = Stats[0] + "\n" + Math.Round(obj.BytesSent / filesize, 3) + "%\n" + Stats[2] + "\nFinished in:\t" + (int)RemainingTime.TotalHours + ":" + RemainingTime.ToString(@"mm\:ss");
 				})
 			);
 			}
@@ -149,10 +160,17 @@ namespace Csharp_Youtube_Uploader
 		{
 			if (!String.IsNullOrEmpty(FileName.Text))
 			{
-				string Title = VideoTitle.Text;
-				UploadQueue.Items.Add(UploadEntry.newUploadEntry(Title));	//Upload Queue Entry
-				TabControl.SelectedIndex = 3;								//Switches Tab to Upload Queue
-				Upload(Title, VideoDescription.Text, VideoTags.Text.Split(','), video_constructor.Categories.Events, GetPrivacyStatus(), FileName.Text);
+				if (!string.IsNullOrEmpty(ProfileComboBox.SelectionBoxItem.ToString()))
+				{
+					string Title = VideoTitle.Text;
+					UploadQueue.Items.Add(UploadEntry.newUploadEntry(Title));	//Upload Queue Entry
+					TabControl.SelectedIndex = 3;								//Switches Tab to Upload Queue
+					Upload(Title, VideoDescription.Text, VideoTags.Text.Split(','), video_constructor.Categories.Events, GetPrivacyStatus(), FileName.Text, ProfileComboBox.SelectionBoxItem.ToString());
+				}
+				else
+				{
+					MessageBox.Show("Please select a destination Account");
+				}
 			}
 			else
 			{
@@ -175,7 +193,7 @@ namespace Csharp_Youtube_Uploader
 
 		private string GetPrivacyStatus()
 		{
-			string PrivacyStatus = "";
+			string PrivacyStatus = string.Empty;
 
 			if (PrivacySettings.SelectionBoxItem.ToString() == "Public")
 			{
@@ -219,38 +237,14 @@ namespace Csharp_Youtube_Uploader
 
 		private async void Add_Account(object sender, RoutedEventArgs e)
 		{
-			await Google_auth.requestUserCredentialUpload(ProfileNameBox.Text);
-			List<string> ProfileList = readProfileList();
-			ProfileList.Add(ProfileNameBox.Text);
-			saveProfileList(ProfileList);
-			updateProfileLists();
-		}
-
-		private List<string> readProfileList()
-		{
-			string saveFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\ProfileList.lst";
-			List<string> ProfileList = new List<string>();
-			try
+			if (!string.IsNullOrEmpty(ProfileNameBox.Text))
 			{
-				using (Stream stream = File.Open(saveFile, FileMode.Open))
-				{
-					var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-
-					ProfileList = (List<string>)bformatter.Deserialize(stream);
-				}
+				await Google_auth.requestUserCredentialUpload(ProfileNameBox.Text);
+				updateProfileLists();
 			}
-			catch (FileNotFoundException)
-			{ }
-			return ProfileList;
-		}
-
-		private void saveProfileList(List<string> ProfileList)
-		{
-			string saveFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\ProfileList.lst";
-			using (Stream stream = File.Open(saveFile, FileMode.Create))
+			else
 			{
-				var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-				bformatter.Serialize(stream, ProfileList);
+				MessageBox.Show("Please Enter a Profile Name");
 			}
 		}
 
@@ -258,13 +252,19 @@ namespace Csharp_Youtube_Uploader
 		{
 			ProfileComboBox.Items.Clear();
 			ProfileList.Items.Clear();
-			foreach (string ProfileName in readProfileList())
+
+			string[] Files = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\Youtube.Auth.Store\");
+			foreach (string File in Files)
 			{
+				string rawFileName = System.IO.Path.GetFileName(File);
+				string ProfileName = rawFileName.Replace("Google.Apis.Auth.OAuth2.Responses.TokenResponse-", string.Empty);
+				
 				ComboBoxItem Profile = new ComboBoxItem();
 				Profile.Content = ProfileName;
 
 				ListBoxItem Profile2 = new ListBoxItem();
 				Profile2.Content = ProfileName;
+
 				ProfileComboBox.Items.Add(Profile);
 				ProfileList.Items.Add(Profile2);
 			}
@@ -283,11 +283,21 @@ namespace Csharp_Youtube_Uploader
 			MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show(ConfirmationBox, "Delete Confirmation", System.Windows.MessageBoxButton.YesNo);
 			if (messageBoxResult == MessageBoxResult.Yes)
 			{
-				List<string> ProfileListstring = readProfileList();
-				ProfileListstring.Remove(ProfileName);
 				File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\Youtube.Auth.Store\Google.Apis.Auth.OAuth2.Responses.TokenResponse-" + ProfileName);
-				saveProfileList(ProfileListstring);
 				updateProfileLists();
+			}
+		}
+
+		// Experimential
+		private async void SaveUploads(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			if (UploadItems.Count > 0)
+			{
+				string saveFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\UploadEntries.lst";
+				string jsonstring = await JsonConvert.SerializeObjectAsync(UploadItems);
+				StreamWriter file = new StreamWriter(saveFile);
+				file.Write(jsonstring);
+				file.Close();
 			}
 		}
 	}
