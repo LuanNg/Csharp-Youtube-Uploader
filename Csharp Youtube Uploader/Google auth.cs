@@ -17,7 +17,6 @@ namespace Csharp_Youtube_Uploader
 {
 	class Google_auth
 	{
-		static UserCredential userCred;
 		public static async Task<UserCredential> requestUserCredentialUpload(string ProfileName)
 		{
 			return await GoogleWebAuthorizationBroker.AuthorizeAsync(

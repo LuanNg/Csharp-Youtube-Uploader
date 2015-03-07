@@ -22,10 +22,6 @@ namespace Csharp_Youtube_Uploader
 				HttpClientInitializer = credential,
 				ApplicationName = "C-Sharp Youtube Uploader"
 			});
-
 		}
-
-		
-			
 	}
 }
