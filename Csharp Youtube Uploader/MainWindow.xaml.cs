@@ -36,8 +36,7 @@ namespace Csharp_Youtube_Uploader
 	public partial class MainWindow : MetroWindow
 	{
 		double filesize;
-		List<UploadParameters> Uploads = new List<UploadParameters>();
-		
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -55,6 +54,7 @@ namespace Csharp_Youtube_Uploader
 			{
 				filesize = file.Length;
 				var uploadRequest = youtuberequest.Videos.Insert(video, "snippet,status", file, "video/*");
+				MessageBox.Show(youtuberequest.Serializer.Serialize(uploadRequest));
 				uploadRequest.ProgressChanged += new Action<Google.Apis.Upload.IUploadProgress>((p) => ProgressHandler(p, uploadRequest));
 				uploadRequest.ResponseReceived += uploadRequest_ResponseReceived;
 				await uploadRequest.ResumeAsync();
@@ -114,10 +114,6 @@ namespace Csharp_Youtube_Uploader
 							UploadEntry.FindChild<TextBlock>("VideoUri").MouseDown += new MouseButtonEventHandler((s,e) => VideoUri_MouseDown(s,e,obj));
 						}
 					}
-					if (Uploads.Exists(x => x.Title == obj.Snippet.Title))
-					{
-						Uploads.Remove(Uploads.Find(x => x.Title == obj.Snippet.Title));
-					}
 				})
 				);
 		}
@@ -170,7 +166,6 @@ namespace Csharp_Youtube_Uploader
 					UploadQueue.Items.Add(UploadEntry.newUploadEntry(Title));	//Upload Queue Entry
 					TabControl.SelectedIndex = 3;								//Switches Tab to Upload Queue
 					UploadParameters UploadParameters = new UploadParameters(Title, VideoDescription.Text, VideoTags.Text.Split(','), video_constructor.Categories.Events, GetPrivacyStatus(), FileName.Text, ProfileComboBox.SelectionBoxItem.ToString());
-					Uploads.Add(UploadParameters);
 					Upload(UploadParameters);
 				}
 				else
@@ -259,20 +254,22 @@ namespace Csharp_Youtube_Uploader
 			ProfileComboBox.Items.Clear();
 			ProfileList.Items.Clear();
 
-			string[] Files = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\Youtube.Auth.Store\");
-			foreach (string File in Files)
-			{
-				string rawFileName = System.IO.Path.GetFileName(File);
-				string ProfileName = rawFileName.Replace("Google.Apis.Auth.OAuth2.Responses.TokenResponse-", string.Empty);
-				
-				ComboBoxItem Profile = new ComboBoxItem();
-				Profile.Content = ProfileName;
+			if(Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\Youtube.Auth.Store\"))
+			{	string[] Files = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\Youtube.Auth.Store\");
+				foreach (string File in Files)
+				{
+					string rawFileName = System.IO.Path.GetFileName(File);
+					string ProfileName = rawFileName.Replace("Google.Apis.Auth.OAuth2.Responses.TokenResponse-", string.Empty);
 
-				ListBoxItem Profile2 = new ListBoxItem();
-				Profile2.Content = ProfileName;
+					ComboBoxItem Profile = new ComboBoxItem();
+					Profile.Content = ProfileName;
 
-				ProfileComboBox.Items.Add(Profile);
-				ProfileList.Items.Add(Profile2);
+					ListBoxItem Profile2 = new ListBoxItem();
+					Profile2.Content = ProfileName;
+		
+					ProfileComboBox.Items.Add(Profile);
+					ProfileList.Items.Add(Profile2);
+				}
 			}
 		}
 
@@ -291,16 +288,6 @@ namespace Csharp_Youtube_Uploader
 			{
 				File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\Youtube.Auth.Store\Google.Apis.Auth.OAuth2.Responses.TokenResponse-" + ProfileName);
 				updateProfileLists();
-			}
-		}
-
-		private void SaveUploads(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			string saveFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\UploadsTempCache.lst";
-			using (Stream stream = File.Open(saveFile, FileMode.Create))
-			{
-				var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-				bformatter.Serialize(stream, Uploads);
 			}
 		}
 
