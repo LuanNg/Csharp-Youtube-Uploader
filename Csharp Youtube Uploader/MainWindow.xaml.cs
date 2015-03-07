@@ -272,7 +272,7 @@ namespace Csharp_Youtube_Uploader
 
 		private void NewUploadPreset(object sender, RoutedEventArgs e)
 		{
-
+            MessageBox.Show("Upload Preset cretört");
 		}
 	}
 }
