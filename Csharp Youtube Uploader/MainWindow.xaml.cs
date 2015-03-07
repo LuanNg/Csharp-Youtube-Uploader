@@ -194,22 +194,7 @@ namespace Csharp_Youtube_Uploader
 
 		private string GetPrivacyStatus()
 		{
-			string PrivacyStatus = string.Empty;
-
-			if (PrivacySettings.SelectionBoxItem.ToString() == "Public")
-			{
-				PrivacyStatus = "public";
-			}
-			if (PrivacySettings.SelectionBoxItem.ToString() == "Unlisted")
-			{
-				PrivacyStatus = "unlisted";
-			}
-			if (PrivacySettings.SelectionBoxItem.ToString() == "Private")
-			{
-				PrivacyStatus = "private";
-			}
-
-			return PrivacyStatus;
+			return PrivacySettings.SelectionBoxItem.ToString().ToLower();
 		}
 
 		private void VideoTitle_TextChanged(object sender, TextChangedEventArgs e)
