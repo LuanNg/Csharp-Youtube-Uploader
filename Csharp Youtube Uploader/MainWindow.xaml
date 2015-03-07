@@ -4,7 +4,7 @@
 		xmlns:tb="http://www.hardcodet.net/taskbar"
 		xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 		xmlns:properties="clr-namespace:Csharp_Youtube_Uploader.Properties"
-        Title="C# Youtube Uploader" Height="563" Width="1000" WindowStartupLocation="CenterScreen" MinWidth="853" MinHeight="480" Icon="Tray.ico" Closing="SaveUploads">
+        Title="C# Youtube Uploader" Height="563" Width="1000" WindowStartupLocation="CenterScreen" MinWidth="853" MinHeight="480" Icon="Tray.ico">
 
 	<Grid>
 		<!-- Start Tray-->

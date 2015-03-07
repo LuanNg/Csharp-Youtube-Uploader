@@ -47,7 +47,7 @@ namespace Csharp_Youtube_Uploader
 			video.Snippet.Tags = tags;
 			video.Snippet.CategoryId = ((int)category).ToString(); // See https://developers.google.com/youtube/v3/docs/videoCategories/list ---> Find ich nicht
 			video.Status = new VideoStatus();
-			video.Status.PrivacyStatus = PrivacyStatus; // or "private" or "public"
+			video.Status.PrivacyStatus = PrivacyStatus; // or "private" or "public
 			return video;
 		}
 		

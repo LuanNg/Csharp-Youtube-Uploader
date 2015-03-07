@@ -12,9 +12,9 @@ using Google.Apis.Util.Store;
 
 namespace Csharp_Youtube_Uploader
 {
+	[Serializable]
 	class Youtube_request
 	{
-
 		public static YouTubeService getYoutubeService(UserCredential credential)
 		{
 			return new YouTubeService(new BaseClientService.Initializer()

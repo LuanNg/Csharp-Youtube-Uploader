@@ -36,35 +36,35 @@ namespace Csharp_Youtube_Uploader
 	public partial class MainWindow : MetroWindow
 	{
 		double filesize;
-		List<VideosResource.InsertMediaUpload> UploadItems = new List<VideosResource.InsertMediaUpload>();
+		List<UploadParameters> Uploads = new List<UploadParameters>();
 		
 		public MainWindow()
 		{
 			InitializeComponent();
 			updateProfileLists();
+			// Uploads = readCachedUploads();	//NOT FINAL
 		}
-		private async void Upload(string Title, string Description, string[] tags,video_constructor.Categories category,string PrivacyStatus,string path, string ProfileName)
+
+		private async void Upload(UploadParameters P)
 		{
-			var credential = await Google_auth.requestUserCredentialUpload(ProfileName);
+			var credential = await Google_auth.requestUserCredentialUpload(P.ProfileName);
 			var youtuberequest = Youtube_request.getYoutubeService(credential);
-			var video = video_constructor.constructVideo(Title,Description,tags,category,PrivacyStatus);
-			var filePath = path;
+			var video = video_constructor.constructVideo(P.Title,P.Description,P.tags,P.category,P.PrivacyStatus);
+			var filePath = P.path;
 			using (var file = new FileStream(filePath, FileMode.Open))
 			{
 				filesize = file.Length;
 				var uploadRequest = youtuberequest.Videos.Insert(video, "snippet,status", file, "video/*");
 				uploadRequest.ProgressChanged += new Action<Google.Apis.Upload.IUploadProgress>((p) => ProgressHandler(p, uploadRequest));
 				uploadRequest.ResponseReceived += uploadRequest_ResponseReceived;
-				await uploadRequest.UploadAsync();
+				await uploadRequest.ResumeAsync();
 			}
 		}
 
-		private async void ResumeUpload(VideosResource.InsertMediaUpload uploadRequest)
+		private async void ResumeUpload()
 		{
-			uploadRequest.ProgressChanged += new Action<Google.Apis.Upload.IUploadProgress>((p) => ProgressHandler(p, uploadRequest));
-			uploadRequest.ResponseReceived += uploadRequest_ResponseReceived;
-			await uploadRequest.ResumeAsync();
-		}
+			
+		}	//Creates another Upload instead of Resuming
 
 		private void ProgressHandler(IUploadProgress obj, VideosResource.InsertMediaUpload video)
 		{
@@ -113,6 +113,10 @@ namespace Csharp_Youtube_Uploader
 							UploadEntry.FindChild<TextBlock>("VideoUri").Text = "http://youtube.com/watch?v=" + obj.Id;
 							UploadEntry.FindChild<TextBlock>("VideoUri").MouseDown += new MouseButtonEventHandler((s,e) => VideoUri_MouseDown(s,e,obj));
 						}
+					}
+					if (Uploads.Exists(x => x.Title == obj.Snippet.Title))
+					{
+						Uploads.Remove(Uploads.Find(x => x.Title == obj.Snippet.Title));
 					}
 				})
 				);
@@ -165,7 +169,9 @@ namespace Csharp_Youtube_Uploader
 					string Title = VideoTitle.Text;
 					UploadQueue.Items.Add(UploadEntry.newUploadEntry(Title));	//Upload Queue Entry
 					TabControl.SelectedIndex = 3;								//Switches Tab to Upload Queue
-					Upload(Title, VideoDescription.Text, VideoTags.Text.Split(','), video_constructor.Categories.Events, GetPrivacyStatus(), FileName.Text, ProfileComboBox.SelectionBoxItem.ToString());
+					UploadParameters UploadParameters = new UploadParameters(Title, VideoDescription.Text, VideoTags.Text.Split(','), video_constructor.Categories.Events, GetPrivacyStatus(), FileName.Text, ProfileComboBox.SelectionBoxItem.ToString());
+					Uploads.Add(UploadParameters);
+					Upload(UploadParameters);
 				}
 				else
 				{
@@ -288,17 +294,39 @@ namespace Csharp_Youtube_Uploader
 			}
 		}
 
-		// Experimential
-		private async void SaveUploads(object sender, System.ComponentModel.CancelEventArgs e)
+		private void SaveUploads(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			if (UploadItems.Count > 0)
+			string saveFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\UploadsTempCache.lst";
+			using (Stream stream = File.Open(saveFile, FileMode.Create))
 			{
-				string saveFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\UploadEntries.lst";
-				string jsonstring = await JsonConvert.SerializeObjectAsync(UploadItems);
-				StreamWriter file = new StreamWriter(saveFile);
-				file.Write(jsonstring);
-				file.Close();
+				var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+				bformatter.Serialize(stream, Uploads);
 			}
 		}
+
+		/*
+		private List<UploadParameters> readCachedUploads()
+		{
+			string saveFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\UploadsTempCache.lst";
+			List<UploadParameters> Uploads = new List<UploadParameters>();
+			try
+			{
+				using (Stream stream = File.Open(saveFile, FileMode.Open))
+				{
+					var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+					Uploads = (List<UploadParameters>)bformatter.Deserialize(stream);
+				}
+			}
+			catch (FileNotFoundException)
+			{ }
+			foreach (UploadParameters P in Uploads)
+			{
+				UploadQueue.Items.Add(UploadEntry.newUploadEntry(P.Title));
+				//ResumeUpload(P);
+			}
+			return Uploads;
+		}
+		*/
 	}
 }
