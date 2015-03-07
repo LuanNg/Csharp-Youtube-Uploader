@@ -70,6 +70,9 @@
 					<TextBlock Name="VideoTagsHeader" HorizontalAlignment="Left" Margin="10,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="14" Width="144" FontWeight="Bold" FontFamily="Segoe UI, Lucida Sans Unicode, Verdana" FontSize="11" Text="Tags: ( 0 / 500 )"/>
 					<TextBlock HorizontalAlignment="Left" Margin="12,300,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="14" Width="144" FontWeight="Bold" FontFamily="Segoe UI, Lucida Sans Unicode, Verdana" FontSize="11" Text="Upload To:"/>
 					<ComboBox Name="ProfileComboBox" HorizontalAlignment="Left" Margin="161,300,0,0" VerticalAlignment="Top" Width="120"/>
+					<TextBlock HorizontalAlignment="Left" Margin="12,340,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="14" Width="144" FontWeight="Bold" FontFamily="Segoe UI, Lucida Sans Unicode, Verdana" FontSize="11" Text="Upload Preset:"/>
+					<ComboBox Name="UploadPresetComboBox" HorizontalAlignment="Left" Margin="161,331,0,0" VerticalAlignment="Top" Width="120"/>
+					<Button Content="Save new preset" HorizontalAlignment="Left" Margin="286,0,0,127" VerticalAlignment="Bottom" Width="100" Height="26" Click="NewUploadPreset"/>
 				</Grid>
 			</TabItem>
 

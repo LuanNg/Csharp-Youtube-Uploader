@@ -54,17 +54,11 @@ namespace Csharp_Youtube_Uploader
 			{
 				filesize = file.Length;
 				var uploadRequest = youtuberequest.Videos.Insert(video, "snippet,status", file, "video/*");
-				MessageBox.Show(youtuberequest.Serializer.Serialize(uploadRequest));
 				uploadRequest.ProgressChanged += new Action<Google.Apis.Upload.IUploadProgress>((p) => ProgressHandler(p, uploadRequest));
 				uploadRequest.ResponseReceived += uploadRequest_ResponseReceived;
 				await uploadRequest.ResumeAsync();
 			}
 		}
-
-		private async void ResumeUpload()
-		{
-			
-		}	//Creates another Upload instead of Resuming
 
 		private void ProgressHandler(IUploadProgress obj, VideosResource.InsertMediaUpload video)
 		{
@@ -276,29 +270,9 @@ namespace Csharp_Youtube_Uploader
 			}
 		}
 
-		/*
-		private List<UploadParameters> readCachedUploads()
+		private void NewUploadPreset(object sender, RoutedEventArgs e)
 		{
-			string saveFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\UploadsTempCache.lst";
-			List<UploadParameters> Uploads = new List<UploadParameters>();
-			try
-			{
-				using (Stream stream = File.Open(saveFile, FileMode.Open))
-				{
-					var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
 
-					Uploads = (List<UploadParameters>)bformatter.Deserialize(stream);
-				}
-			}
-			catch (FileNotFoundException)
-			{ }
-			foreach (UploadParameters P in Uploads)
-			{
-				UploadQueue.Items.Add(UploadEntry.newUploadEntry(P.Title));
-				//ResumeUpload(P);
-			}
-			return Uploads;
 		}
-		*/
 	}
 }
