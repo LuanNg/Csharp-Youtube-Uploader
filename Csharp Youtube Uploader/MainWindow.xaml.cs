@@ -6,7 +6,6 @@ using Google.Apis.YouTube.v3;
 using Google.Apis.YouTube.v3.Data;
 using MahApps.Metro;
 using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -218,17 +217,14 @@ namespace Csharp_Youtube_Uploader
 
 		private async void Add_Account(object sender, RoutedEventArgs e)
 		{
-			//MessageDialogResult result = await this.ShowMessageAsync("Hello!", "Welcome to the world of metro!",MessageDialogStyle.AffirmativeAndNegativeAndDoubleAuxiliary);
-			//await this.ShowMessageAsync(result.ToString(),"");
-			string ProfileName = await this.ShowInputAsync("Please enter a Profile Name","");
-			if (!string.IsNullOrEmpty(ProfileName) && !doesProfileExist(ProfileName))
+			if (!string.IsNullOrEmpty(ProfileNameBox.Text))
 			{
-				await Google_auth.requestUserCredentialUpload(ProfileName);
+				await Google_auth.requestUserCredentialUpload(ProfileNameBox.Text);
 				updateProfileLists();
 			}
 			else
 			{
-				await this.ShowMessageAsync("Invalid Profile Name specified!","");
+				MessageBox.Show("Please Enter a Profile Name");
 			}
 		}
 
@@ -256,25 +252,6 @@ namespace Csharp_Youtube_Uploader
 			}
 		}
 
-		private bool doesProfileExist(string name)
-		{
-			if (Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\Youtube.Auth.Store\"))
-			{
-				string[] Files = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\Youtube.Auth.Store\");
-				foreach (string File in Files)
-				{
-					string rawFileName = System.IO.Path.GetFileName(File);
-					string ProfileName = rawFileName.Replace("Google.Apis.Auth.OAuth2.Responses.TokenResponse-", string.Empty);
-
-					if (String.Equals(ProfileName, name))
-					{
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-
 		private void ProfileList_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			ProfileList.SelectionChanged -= ProfileList_SelectionChanged;
@@ -295,13 +272,7 @@ namespace Csharp_Youtube_Uploader
 
 		private void NewUploadPreset(object sender, RoutedEventArgs e)
 		{
-			/*string saveFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\C#YTUploader\"".prst";
-			UploadParameters UploadParameters = new UploadParameters(Title, VideoDescription.Text, VideoTags.Text.Split(','), video_constructor.Categories.Events, GetPrivacyStatus(), FileName.Text, ProfileComboBox.SelectionBoxItem.ToString());
-			using (Stream stream = File.Open(saveFile, FileMode.Create))
-			{
-				var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-				bformatter.Serialize(stream, UploadParameters);
-			}*/
+            MessageBox.Show("Upload Preset cretört");
 		}
 	}
 }
